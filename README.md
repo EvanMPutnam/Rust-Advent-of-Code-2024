@@ -5,7 +5,7 @@ project at work would be making use of it.
 
 ## Current Solutions
 - Dec 1 - Complete
-- Dec 2 - Complete
+- Dec 2 - Incomplete
 - Dec 3 - Incomplete
 - Dec 4 - Incomplete
 - Dec 5 - Incomplete

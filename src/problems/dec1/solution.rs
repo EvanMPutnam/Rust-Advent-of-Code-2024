@@ -29,11 +29,11 @@ pub fn solution(file: &str) -> i128 {
 
 #[cfg(test)]
 mod tests {
-    use crate::problems::jan1::solution::solution;
+    use crate::problems::dec1::solution::solution;
 
     #[test]
     fn test_solution() {
-        let file_path = "resources/jan1.txt";
+        let file_path = "resources/dec1.txt";
         let response = solution(file_path);
         let answer = 1666427;
         assert_eq!(response, answer);

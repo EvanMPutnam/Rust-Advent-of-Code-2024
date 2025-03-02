@@ -7,7 +7,7 @@ project at work would be making use of it.
 - Dec 1 - Complete
 - Dec 2 - Complete
 - Dec 3 - Complete
-- Dec 4 - Incomplete
+- Dec 4 - Complete
 - Dec 5 - Incomplete
 - Dec 6 - Incomplete
 - Dec 7 - Incomplete

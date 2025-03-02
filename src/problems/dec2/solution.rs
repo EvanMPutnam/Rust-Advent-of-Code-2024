@@ -21,7 +21,11 @@ fn is_line_valid(values: &Vec<i128>) -> bool {
             continue;
         }
         if current_status == Status::Second {
-            current_status = if numeric_value > prev_number { Status::Increasing } else { Status::Decreasing };
+            current_status = if numeric_value > prev_number {
+                Status::Increasing
+            } else {
+                Status::Decreasing
+            };
         }
 
         let difference = numeric_value - prev_number;
@@ -42,8 +46,10 @@ fn is_line_valid(values: &Vec<i128>) -> bool {
 pub fn solution1(file: &str) -> i128 {
     let file = fs::read_to_string(file).expect("Could not read file");
     let total_count = file.lines().fold(0, |acc, line| {
-        let vec = line.split_whitespace()
-            .collect::<Vec<&str>>().iter()
+        let vec = line
+            .split_whitespace()
+            .collect::<Vec<&str>>()
+            .iter()
             .map(|&x| x.parse::<i128>().unwrap())
             .collect::<Vec<i128>>();
         if is_line_valid(&vec) {
@@ -58,11 +64,14 @@ pub fn process_vectors_with_missing_elements(vec: &Vec<i128>) -> bool {
     for i in 0..vec.len() {
         let mut smaller_vec = vec![];
         for i2 in 0..vec.len() {
-            if i == i2 { continue; }
-            else { smaller_vec.push(vec[i2]); }
+            if i == i2 {
+                continue;
+            } else {
+                smaller_vec.push(vec[i2]);
+            }
         }
         if is_line_valid(&smaller_vec) {
-            return true
+            return true;
         }
     }
     false
@@ -73,8 +82,10 @@ pub fn solution2(file: &str) -> i128 {
     let file = fs::read_to_string(file).expect("Could not read file");
     let mut counter = 0;
     for line in file.lines() {
-        let vec = line.split_whitespace()
-            .collect::<Vec<&str>>().iter()
+        let vec = line
+            .split_whitespace()
+            .collect::<Vec<&str>>()
+            .iter()
             .map(|&x| x.parse::<i128>().unwrap())
             .collect::<Vec<i128>>();
         if is_line_valid(&vec) {

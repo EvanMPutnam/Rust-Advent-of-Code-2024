@@ -1,16 +1,22 @@
-use std::fs;
 use regex::Regex;
+use std::fs;
 
 fn process_mult_instruction(value: &str) -> i128 {
     let pieces = value.split(',').collect::<Vec<&str>>();
-    let left_value = *pieces.get(0).unwrap()
+    let left_value = *pieces
+        .get(0)
+        .unwrap()
         .split('(')
         .collect::<Vec<&str>>()
-        .get(1).unwrap();
-    let right_value = *pieces.get(1).unwrap()
+        .get(1)
+        .unwrap();
+    let right_value = *pieces
+        .get(1)
+        .unwrap()
         .split(')')
         .collect::<Vec<&str>>()
-        .get(0).unwrap();
+        .get(0)
+        .unwrap();
     left_value.parse::<i128>().unwrap() * right_value.parse::<i128>().unwrap()
 }
 

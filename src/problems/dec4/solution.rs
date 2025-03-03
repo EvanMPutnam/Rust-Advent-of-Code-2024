@@ -90,111 +90,123 @@ pub fn solution(file: &str) -> i32 {
     valid_count
 }
 
-// Could definitely clean this up for not going to worry about it for now...
-fn check_mas2(christmas_data: &ChristmasData, start_x: i64, start_y: i64) -> i32 {
-    let mut count = 0;
-    // Check backwards
-    if start_x - 2 >= 0 && start_y + 2 < christmas_data.y_dim as i64 {
-        let s_left = christmas_data.vec[xy_index(
-            (start_x - 2) as usize,
+fn check_backwards(christmas_data: &ChristmasData, start_x: i64, start_y: i64) -> i32 {
+    let s_left = christmas_data.vec[xy_index(
+        (start_x - 2) as usize,
+        (start_y) as usize,
+        christmas_data.x_dim,
+    )] == 'S';
+    let a_middle_left = christmas_data.vec[xy_index(
+        (start_x - 1) as usize,
+        (start_y + 1) as usize,
+        christmas_data.x_dim,
+    )] == 'A';
+    let m_below = christmas_data.vec[xy_index(
+        (start_x) as usize,
+        (start_y + 2) as usize,
+        christmas_data.x_dim,
+    )] == 'M';
+    let s_below_left = christmas_data.vec[xy_index(
+        (start_x - 2) as usize,
+        (start_y + 2) as usize,
+        christmas_data.x_dim,
+    )] == 'S';
+    if s_left && a_middle_left && m_below && s_below_left {
+        return 1;
+    }
+    0
+}
+
+fn check_above(christmas_data: &ChristmasData, start_x: i64, start_y: i64) -> i32 {
+    let s_above = christmas_data.vec[xy_index(
+        (start_x) as usize,
+        (start_y - 2) as usize,
+        christmas_data.x_dim,
+    )] == 'S';
+    let s2_above = christmas_data.vec[xy_index(
+        (start_x + 2) as usize,
+        (start_y - 2) as usize,
+        christmas_data.x_dim,
+    )] == 'S';
+    let a_middle = christmas_data.vec[xy_index(
+        (start_x + 1) as usize,
+        (start_y - 1) as usize,
+        christmas_data.x_dim,
+    )] == 'A';
+    let m_next = christmas_data.vec[xy_index(
+        (start_x + 2) as usize,
+        (start_y) as usize,
+        christmas_data.x_dim,
+    )] == 'M';
+    if s_above && s2_above && a_middle && m_next {
+        1
+    } else {
+        0
+    }
+}
+
+fn check_forwards(christmas_data: &ChristmasData, start_x: i64, start_y: i64) -> i32 {
+    let mut count: i32 = 0;
+    let two_below = christmas_data.vec[xy_index(
+        (start_x) as usize,
+        (start_y + 2) as usize,
+        christmas_data.x_dim,
+    )];
+    if two_below == 'M' {
+        let s_next = christmas_data.vec[xy_index(
+            (start_x + 2) as usize,
             (start_y) as usize,
             christmas_data.x_dim,
         )] == 'S';
-        let a_middle_left = christmas_data.vec[xy_index(
-            (start_x - 1) as usize,
+        let a_middle = christmas_data.vec[xy_index(
+            (start_x + 1) as usize,
             (start_y + 1) as usize,
             christmas_data.x_dim,
         )] == 'A';
-        let m_below = christmas_data.vec[xy_index(
-            (start_x) as usize,
-            (start_y + 2) as usize,
-            christmas_data.x_dim,
-        )] == 'M';
-        let s_below_left = christmas_data.vec[xy_index(
-            (start_x - 2) as usize,
+        let s_below = christmas_data.vec[xy_index(
+            (start_x + 2) as usize,
             (start_y + 2) as usize,
             christmas_data.x_dim,
         )] == 'S';
-        if s_left && a_middle_left && m_below && s_below_left {
-            count += 1
-        }
+        count += if s_next && a_middle && s_below { 1 } else { 0 }
+    } else if two_below == 'S' {
+        let m_next = christmas_data.vec[xy_index(
+            (start_x + 2) as usize,
+            (start_y) as usize,
+            christmas_data.x_dim,
+        )] == 'M';
+        let a_middle = christmas_data.vec[xy_index(
+            (start_x + 1) as usize,
+            (start_y + 1) as usize,
+            christmas_data.x_dim,
+        )] == 'A';
+        let s_below = christmas_data.vec[xy_index(
+            (start_x + 2) as usize,
+            (start_y + 2) as usize,
+            christmas_data.x_dim,
+        )] == 'S';
+        count += if m_next && a_middle && s_below { 1 } else { 0 }
+    }
+    count
+}
+
+// Could definitely clean this up for not going to worry about it for now...
+fn check_mas2(christmas_data: &ChristmasData, start_x: i64, start_y: i64) -> i32 {
+    let mut count = 0;
+    if start_x - 2 >= 0 && start_y + 2 < christmas_data.y_dim as i64 {
+        count += check_backwards(&christmas_data, start_x, start_y);
     }
 
     if !(start_x + 2 < christmas_data.x_dim as i64) {
         return count;
     }
 
-    // Check forwards conditions.
     if start_y + 2 < christmas_data.y_dim as i64 {
-        // Two conditions need to check.
-        // MAS with an M two below.  MAS with an S two below.
-        let two_below = christmas_data.vec[xy_index(
-            (start_x) as usize,
-            (start_y + 2) as usize,
-            christmas_data.x_dim,
-        )];
-        if two_below == 'M' {
-            let s_next = christmas_data.vec[xy_index(
-                (start_x + 2) as usize,
-                (start_y) as usize,
-                christmas_data.x_dim,
-            )] == 'S';
-            let a_middle = christmas_data.vec[xy_index(
-                (start_x + 1) as usize,
-                (start_y + 1) as usize,
-                christmas_data.x_dim,
-            )] == 'A';
-            let s_below = christmas_data.vec[xy_index(
-                (start_x + 2) as usize,
-                (start_y + 2) as usize,
-                christmas_data.x_dim,
-            )] == 'S';
-            count += if s_next && a_middle && s_below { 1 } else { 0 }
-        } else if two_below == 'S' {
-            let m_next = christmas_data.vec[xy_index(
-                (start_x + 2) as usize,
-                (start_y) as usize,
-                christmas_data.x_dim,
-            )] == 'M';
-            let a_middle = christmas_data.vec[xy_index(
-                (start_x + 1) as usize,
-                (start_y + 1) as usize,
-                christmas_data.x_dim,
-            )] == 'A';
-            let s_below = christmas_data.vec[xy_index(
-                (start_x + 2) as usize,
-                (start_y + 2) as usize,
-                christmas_data.x_dim,
-            )] == 'S';
-            count += if m_next && a_middle && s_below { 1 } else { 0 }
-        }
+        count += check_forwards(&christmas_data, start_x, start_y);
     }
+
     if start_y - 2 >= 0i64 {
-        let s_above = christmas_data.vec[xy_index(
-            (start_x) as usize,
-            (start_y - 2) as usize,
-            christmas_data.x_dim,
-        )] == 'S';
-        let s2_above = christmas_data.vec[xy_index(
-            (start_x + 2) as usize,
-            (start_y - 2) as usize,
-            christmas_data.x_dim,
-        )] == 'S';
-        let a_middle = christmas_data.vec[xy_index(
-            (start_x + 1) as usize,
-            (start_y - 1) as usize,
-            christmas_data.x_dim,
-        )] == 'A';
-        let m_next = christmas_data.vec[xy_index(
-            (start_x + 2) as usize,
-            (start_y) as usize,
-            christmas_data.x_dim,
-        )] == 'M';
-        count += if s_above && s2_above && a_middle && m_next {
-            1
-        } else {
-            0
-        };
+        count += check_above(&christmas_data, start_x, start_y)
     }
     count
 }
